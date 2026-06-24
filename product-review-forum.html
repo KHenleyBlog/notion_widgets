@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Review Blog Post Generator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #faf7f5;
+            color: #2d2d2d;
+            line-height: 1.6;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #9b59b6, #c39bd3);
+            color: #fff;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .app-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .app-header p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 16px 80px;
+        }
+
+        .progress-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 32px;
+            padding: 0 4px;
+        }
+
+        .progress-segment {
+            flex: 1;
+            height: 6px;
+            background: #e0d6e8;
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
+
+        .progress-segment.active {
+            background: #9b59b6;
+        }
+
+        .progress-segment.completed {
+            background: #7d3c98;
+        }
+
+        .section {
+            display: none;
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-number {
+            display: inline-block;
+            background: #f3e8f9;
+            color: #9b59b6;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #2d2d2d;
+        }
+
+        .section-desc {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 24px;
+        }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #444;
+        }
+
+        .field-group .hint {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 6px;
+            font-style: italic;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e8e0ed;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: #fdfcfe;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #9b59b6;
+            background: #fff;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        textarea.short {
+            min-height: 60px;
+        }
+
+        .dynamic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dynamic-list .list-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dynamic-list .list-item input {
+            flex: 1;
+        }
+
+        .btn-remove-item {
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: color 0.2s;
+        }
+
+        .btn-remove-item:hover {
+            color: #e74c3c;
+        }
+
+        .btn-add-item {
+            background: none;
+            border: 2px dashed #d5c8e0;
+            color: #9b59b6;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-add-item:hover {
+            background: #f8f0fc;
+            border-color: #9b59b6;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .step-block {
+            background: #fdfcfe;
+            border: 2px solid #e8e0ed;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .step-block .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .step-block .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #9b59b6;
+        }
+
+        .step-block input,
+        .step-block textarea {
+            border-color: #ede6f2;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-secondary {
+            background: #f0e6f6;
+            color: #7d3c98;
+        }
+
+        .btn-secondary:hover {
+            background: #e4d4f0;
+        }
+
+        .btn-primary {
+            background: #9b59b6;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #8e44ad;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: #fff;
+            padding: 16px 36px;
+            font-size: 17px;
+            width: 100%;
+        }
+
+        .btn-generate:hover {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(155, 89, 182, 0.3);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .rating-stars button {
+            background: none;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.15s, transform 0.15s;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .rating-stars button.filled {
+            color: #f39c12;
+        }
+
+        .rating-stars button:hover {
+            transform: scale(1.2);
+        }
+
+        .output-panel {
+            display: none;
+        }
+
+        .output-panel.active {
+            display: block;
+        }
+
+        .output-toolbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .output-toolbar .btn {
+            font-size: 13px;
+            padding: 8px 16px;
+        }
+
+        .btn-copy {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .btn-copy:hover {
+            background: #219a52;
+        }
+
+        .btn-copy.copied {
+            background: #2ecc71;
+        }
+
+        .btn-back-edit {
+            background: #f0e6f6;
+            color: #7d3c98;
+        }
+
+        .output-preview {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .output-preview h1 {
+            font-size: 28px;
+            margin-bottom: 4px;
+            color: #2d2d2d;
+        }
+
+        .output-preview h2 {
+            font-size: 22px;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            color: #2d2d2d;
+            border-bottom: 2px solid #f3e8f9;
+            padding-bottom: 6px;
+        }
+
+        .output-preview h3 {
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .output-preview h4 {
+            font-size: 16px;
+            margin-top: 16px;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        .output-preview p {
+            margin-bottom: 12px;
+        }
+
+        .output-preview ul {
+            margin-bottom: 12px;
+            padding-left: 24px;
+        }
+
+        .output-preview li {
+            margin-bottom: 4px;
+        }
+
+        .output-preview .rating-display {
+            font-size: 24px;
+            margin: 8px 0;
+        }
+
+        .optional-badge {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #999;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid #ede6f2;
+            margin: 24px 0;
+        }
+
+        .raw-output {
+            display: none;
+            background: #2d2d2d;
+            color: #e0e0e0;
+            border-radius: 12px;
+            padding: 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .raw-output.active {
+            display: block;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: #f0e6f6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .view-toggle button {
+            flex: 1;
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 600;
+            color: #7d3c98;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .view-toggle button.active {
+            background: #9b59b6;
+            color: #fff;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 16px 12px 80px; }
+            .section { padding: 24px 18px; }
+            .app-header { padding: 24px 16px; }
+            .app-header h1 { font-size: 22px; }
+            .output-preview { padding: 24px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-header">
+    <h1>Product Review Blog Post Generator</h1>
+    <p>Answer the prompts below and get a fully formatted blog post ready to publish.</p>
+</div>
+
+<div class="container">
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Section 1: Product Basics -->
+    <div class="section active" data-section="0">
+        <span class="section-number">1 of 11</span>
+        <h2>Product Basics</h2>
+        <p class="section-desc">Let's start with the essentials about the product you're reviewing.</p>
+
+        <div class="field-group">
+            <label>Product Name</label>
+            <div class="hint">e.g., "Fenty Beauty Pro Filt'r Soft Matte Foundation"</div>
+            <input type="text" id="productName" placeholder="Enter the full product name">
+        </div>
+
+        <div class="field-group">
+            <label>Benefit-Driven Promise or Opinion</label>
+            <div class="hint">This becomes your H1 subtitle — e.g., "The Only Foundation That Survived My 12-Hour Workday"</div>
+            <input type="text" id="benefitPromise" placeholder="What's the big claim or opinion?">
+        </div>
+
+        <div class="field-group">
+            <label>Vivid First-Person Hook</label>
+            <div class="hint">Your attention-grabbing H2 — e.g., "This Foundation Made Me Actually Excited to Get Ready Again"</div>
+            <input type="text" id="vividHook" placeholder="A punchy, personal one-liner">
+        </div>
+
+        <div class="nav-buttons">
+            <div></div>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 2: Introduction -->
+    <div class="section" data-section="1">
+        <span class="section-number">2 of 11</span>
+        <h2>Introduction</h2>
+        <p class="section-desc">Set the scene — talk to your reader like a friend who just asked "have you tried anything new lately?"</p>
+
+        <div class="field-group">
+            <label>What's the relatable challenge?</label>
+            <div class="hint">What problem does your reader face? e.g., "Finding a foundation for dry skin that doesn't look cakey by noon"</div>
+            <textarea id="relatableChallenge" placeholder="Describe the struggle your reader knows too well..."></textarea>
+        </div>
+
+        <div class="field-group">
+            <label>How did you discover this product?</label>
+            <div class="hint">Was it a TikTok find? A friend's recommendation? An impulse buy?</div>
+            <textarea id="discoveryStory" class="short" placeholder="Tell the story of how you found it..."></textarea>
+        </div>
+
+        <div class="field-group">
+            <label>Your teaser hook</label>
+            <div class="hint">End the intro with a reason to keep reading — e.g., "I'm breaking down everything — the shade range, the wear time, and whether it's actually worth your coins."</div>
+            <textarea id="teaserHook" class="short" placeholder="Give them a reason to keep scrolling..."></textarea>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 3: What You Might Need -->
+    <div class="section" data-section="2">
+        <span class="section-number">3 of 11</span>
+        <h2>What You Might Need <span class="optional-badge">Optional</span></h2>
+        <p class="section-desc">List any tools, prep products, or extras your reader should grab before trying this product.</p>
+
+        <div class="field-group">
+            <label>Related tools or products</label>
+            <div class="hint">Brushes, sponges, primers, setting sprays — whatever helps get the best results</div>
+            <div class="dynamic-list" id="mightNeedList">
+                <div class="list-item">
+                    <input type="text" placeholder="e.g., Damp beauty sponge">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+            </div>
+            <button class="btn-add-item" onclick="addListItem('mightNeedList')">+ Add another item</button>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 4: First Impressions -->
+    <div class="section" data-section="3">
+        <span class="section-number">4 of 11</span>
+        <h2>First Impressions</h2>
+        <p class="section-desc">What hit you first when you got this product in your hands?</p>
+
+        <div class="field-group">
+            <label>Packaging & Presentation</label>
+            <div class="hint">Start personal: "I was immediately obsessed with..." — describe the packaging, size, weight, vibe.</div>
+            <textarea id="packaging" placeholder="What did you notice when you first held it?"></textarea>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-group">
+            <label>Shade Range & Inclusivity</label>
+            <div class="hint">How many shades? Are they well-named? Which skin tones are served well (or poorly)?</div>
+            <textarea id="shadeRange" placeholder="Talk about the shade selection and how inclusive it feels..."></textarea>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-group">
+            <label>Price Point</label>
+            <div class="hint">Is it drugstore, mid-range, or luxury? Is it worth it for what you get?</div>
+            <textarea id="pricePoint" class="short" placeholder="How much does it cost and does it feel worth it?"></textarea>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 5: How to Apply It -->
+    <div class="section" data-section="4">
+        <span class="section-number">5 of 11</span>
+        <h2>How to Apply It</h2>
+        <p class="section-desc">Walk your reader through your application process step by step.</p>
+
+        <div class="field-group">
+            <label>What tools/prep does the reader need?</label>
+            <div class="hint">Brushes, skin prep tips, layering notes</div>
+            <div class="dynamic-list" id="applicationToolsList">
+                <div class="list-item">
+                    <input type="text" placeholder="e.g., Flat-top kabuki brush">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+            </div>
+            <button class="btn-add-item" onclick="addListItem('applicationToolsList')">+ Add another tool</button>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-group">
+            <label>Step-by-Step Application</label>
+            <div class="hint">Add each step with a short action title and the instruction</div>
+            <div class="steps-container" id="stepsContainer">
+                <div class="step-block">
+                    <div class="step-header">
+                        <span class="step-number">Step 1</span>
+                        <button class="btn-remove-item" onclick="removeStep(this)" title="Remove">&times;</button>
+                    </div>
+                    <input type="text" placeholder="Action title — e.g., Prep Your Skin" style="margin-bottom: 8px;">
+                    <textarea class="short" placeholder="Describe what to do..."></textarea>
+                </div>
+            </div>
+            <button class="btn-add-item" onclick="addStep()">+ Add another step</button>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 6: Formula Breakdown -->
+    <div class="section" data-section="5">
+        <span class="section-number">6 of 11</span>
+        <h2>The Formula Breakdown</h2>
+        <p class="section-desc">Let's get into the nitty-gritty — what's in this product and who is it for?</p>
+
+        <div class="field-group">
+            <label>Key Ingredients</label>
+            <div class="hint">Start with: "One thing I always check is..." — walk through notable ingredients, what they do, red flags.</div>
+            <textarea id="keyIngredients" placeholder="What ingredients stood out to you and why?"></textarea>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-group">
+            <label>Skin Type Compatibility</label>
+            <div class="hint">Who does this work best for? Oily, dry, combo, sensitive, mature?</div>
+            <textarea id="skinType" class="short" placeholder="Which skin types will love (or hate) this?"></textarea>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-group">
+            <label>Finish & Coverage</label>
+            <div class="hint">Matte, dewy, satin? Sheer, medium, full? How buildable is it?</div>
+            <textarea id="finishCoverage" class="short" placeholder="Describe the finish and how much coverage it gives..."></textarea>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 7: Wear Test Results -->
+    <div class="section" data-section="6">
+        <span class="section-number">7 of 11</span>
+        <h2>Wear Test Results</h2>
+        <p class="section-desc">The real test — how did this product hold up in your actual life?</p>
+
+        <div class="field-group">
+            <label>How It Holds Up Through the Day</label>
+            <div class="hint">Start with: "I wore this on a full school-run-to-work-to-school-pickup day and..." — give real conditions.</div>
+            <textarea id="wearGeneral" placeholder="Tell us about your real-life wear test..."></textarea>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-group">
+            <label>Humidity & Heat Performance</label>
+            <textarea id="wearHumidity" class="short" placeholder="How did it do in hot or humid conditions?"></textarea>
+        </div>
+
+        <div class="field-group">
+            <label>Under Masks or With Glasses</label>
+            <textarea id="wearMasks" class="short" placeholder="Any transfer? Did it stay put?"></textarea>
+        </div>
+
+        <div class="field-group">
+            <label>After a Long Day</label>
+            <textarea id="wearLongDay" class="short" placeholder="Did it oxidize, settle into lines, or transfer?"></textarea>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 8: Pros & Cons -->
+    <div class="section" data-section="7">
+        <span class="section-number">8 of 11</span>
+        <h2>The Honest Pros & Cons</h2>
+        <p class="section-desc">Keep it real — what did you love and what could be better?</p>
+
+        <div class="field-group">
+            <label>What I Love</label>
+            <div class="dynamic-list" id="prosList">
+                <div class="list-item">
+                    <input type="text" placeholder="e.g., Lasts 10+ hours without touch-ups">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+                <div class="list-item">
+                    <input type="text" placeholder="e.g., Doesn't settle into fine lines">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+                <div class="list-item">
+                    <input type="text" placeholder="e.g., Great shade match for medium-deep skin">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+            </div>
+            <button class="btn-add-item" onclick="addListItem('prosList')">+ Add another pro</button>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-group">
+            <label>What Could Be Better</label>
+            <div class="dynamic-list" id="consList">
+                <div class="list-item">
+                    <input type="text" placeholder="e.g., Limited shade range for very deep skin tones">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+                <div class="list-item">
+                    <input type="text" placeholder="e.g., Packaging feels cheap for the price">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+            </div>
+            <button class="btn-add-item" onclick="addListItem('consList')">+ Add another con</button>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 9: How It Compares -->
+    <div class="section" data-section="8">
+        <span class="section-number">9 of 11</span>
+        <h2>How It Compares <span class="optional-badge">Optional</span></h2>
+        <p class="section-desc">Help your reader see how this stacks up against a similar product or popular dupe.</p>
+
+        <div class="field-group">
+            <label>Comparison Product Name</label>
+            <div class="hint">What's the most obvious alternative or dupe?</div>
+            <input type="text" id="comparisonProduct" placeholder="e.g., Maybelline Fit Me Matte + Poreless">
+        </div>
+
+        <div class="field-group">
+            <label>Comparison Breakdown</label>
+            <div class="hint">Compare price, formula, finish, longevity — help your reader decide.</div>
+            <textarea id="comparisonDetails" placeholder="How do these two products stack up against each other?"></textarea>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 10: Final Verdict -->
+    <div class="section" data-section="9">
+        <span class="section-number">10 of 11</span>
+        <h2>Final Verdict</h2>
+        <p class="section-desc">Time to give your honest bottom line.</p>
+
+        <div class="field-group">
+            <label>Would You Repurchase?</label>
+            <div class="hint">Be honest — then frame it for the reader: "If you're someone who..., this is absolutely for you."</div>
+            <textarea id="repurchase" placeholder="Would you buy this again? Who should buy it?"></textarea>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-group">
+            <label>Who Is This Best For?</label>
+            <div class="hint">Bullet-point the ideal customer — skin type, budget, lifestyle, concern</div>
+            <div class="dynamic-list" id="bestForList">
+                <div class="list-item">
+                    <input type="text" placeholder="e.g., Oily-skin girlies who want all-day matte">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+                <div class="list-item">
+                    <input type="text" placeholder="e.g., Budget-friendly beauty lovers">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+            </div>
+            <button class="btn-add-item" onclick="addListItem('bestForList')">+ Add another type</button>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-group">
+            <label>Your Rating</label>
+            <div class="rating-stars" id="ratingStars">
+                <button onclick="setRating(1)">&#9733;</button>
+                <button onclick="setRating(2)">&#9733;</button>
+                <button onclick="setRating(3)">&#9733;</button>
+                <button onclick="setRating(4)">&#9733;</button>
+                <button onclick="setRating(5)">&#9733;</button>
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label>One-Sentence Summary</label>
+            <div class="hint">A punchy verdict line — e.g., "The matte foundation that finally gets it right."</div>
+            <input type="text" id="ratingSummary" placeholder="Sum it up in one sentence">
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-primary" onclick="nextSection()">Next</button>
+        </div>
+    </div>
+
+    <!-- Section 11: Shop the Review -->
+    <div class="section" data-section="10">
+        <span class="section-number">11 of 11</span>
+        <h2>Shop the Review <span class="optional-badge">Optional</span></h2>
+        <p class="section-desc">Add links so your reader can shop what you mentioned.</p>
+
+        <div class="field-group">
+            <label>Main Product Link</label>
+            <input type="url" id="mainProductLink" placeholder="https://...">
+        </div>
+
+        <div class="field-group">
+            <label>Related Products Mentioned</label>
+            <div class="dynamic-list" id="relatedProductsList">
+                <div class="list-item">
+                    <input type="text" placeholder="Product name + link">
+                    <button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>
+                </div>
+            </div>
+            <button class="btn-add-item" onclick="addListItem('relatedProductsList')">+ Add another product</button>
+        </div>
+
+        <div class="field-group">
+            <label>Dupe Option <span class="optional-badge">Optional</span></label>
+            <input type="text" id="dupeOption" placeholder="Affordable dupe name + link">
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" onclick="prevSection()">Back</button>
+            <button class="btn btn-generate" onclick="generatePost()">Generate My Blog Post</button>
+        </div>
+    </div>
+
+    <!-- Output Panel -->
+    <div class="output-panel" id="outputPanel">
+        <div class="output-toolbar">
+            <button class="btn btn-back-edit" onclick="backToEdit()">Back to Edit</button>
+            <div class="view-toggle">
+                <button class="active" onclick="toggleView('preview', this)">Preview</button>
+                <button onclick="toggleView('markdown', this)">Markdown</button>
+            </div>
+            <button class="btn btn-copy" id="copyBtn" onclick="copyOutput()">Copy to Clipboard</button>
+        </div>
+
+        <div class="output-preview" id="outputPreview"></div>
+        <div class="raw-output" id="rawOutput"></div>
+    </div>
+</div>
+
+<script>
+var currentSection = 0;
+var totalSections = 11;
+var currentRating = 0;
+
+function initProgress() {
+    var bar = document.getElementById('progressBar');
+    bar.innerHTML = '';
+    for (var i = 0; i < totalSections; i++) {
+        var seg = document.createElement('div');
+        seg.className = 'progress-segment';
+        if (i < currentSection) seg.className += ' completed';
+        if (i === currentSection) seg.className += ' active';
+        bar.appendChild(seg);
+    }
+}
+
+initProgress();
+
+function showSection(index) {
+    var sections = document.querySelectorAll('.section');
+    sections.forEach(function(s) { s.classList.remove('active'); });
+    sections[index].classList.add('active');
+    currentSection = index;
+    initProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextSection() {
+    if (currentSection < totalSections - 1) {
+        showSection(currentSection + 1);
+    }
+}
+
+function prevSection() {
+    if (currentSection > 0) {
+        showSection(currentSection - 1);
+    }
+}
+
+function addListItem(listId) {
+    var list = document.getElementById(listId);
+    var item = document.createElement('div');
+    item.className = 'list-item';
+    item.innerHTML = '<input type="text" placeholder="Add another...">' +
+        '<button class="btn-remove-item" onclick="removeListItem(this)" title="Remove">&times;</button>';
+    list.appendChild(item);
+    item.querySelector('input').focus();
+}
+
+function removeListItem(btn) {
+    var list = btn.parentElement.parentElement;
+    if (list.children.length > 1) {
+        btn.parentElement.remove();
+    }
+}
+
+function addStep() {
+    var container = document.getElementById('stepsContainer');
+    var count = container.children.length + 1;
+    var block = document.createElement('div');
+    block.className = 'step-block';
+    block.innerHTML =
+        '<div class="step-header">' +
+        '<span class="step-number">Step ' + count + '</span>' +
+        '<button class="btn-remove-item" onclick="removeStep(this)" title="Remove">&times;</button>' +
+        '</div>' +
+        '<input type="text" placeholder="Action title" style="margin-bottom: 8px;">' +
+        '<textarea class="short" placeholder="Describe what to do..."></textarea>';
+    container.appendChild(block);
+    block.querySelector('input').focus();
+}
+
+function removeStep(btn) {
+    var container = document.getElementById('stepsContainer');
+    if (container.children.length > 1) {
+        btn.closest('.step-block').remove();
+        renumberSteps();
+    }
+}
+
+function renumberSteps() {
+    var steps = document.querySelectorAll('#stepsContainer .step-block');
+    steps.forEach(function(step, i) {
+        step.querySelector('.step-number').textContent = 'Step ' + (i + 1);
+    });
+}
+
+function setRating(num) {
+    currentRating = num;
+    var stars = document.querySelectorAll('#ratingStars button');
+    stars.forEach(function(star, i) {
+        star.classList.toggle('filled', i < num);
+    });
+}
+
+function getListValues(listId) {
+    var items = document.querySelectorAll('#' + listId + ' .list-item input');
+    var values = [];
+    items.forEach(function(input) {
+        if (input.value.trim()) values.push(input.value.trim());
+    });
+    return values;
+}
+
+function getSteps() {
+    var steps = [];
+    var blocks = document.querySelectorAll('#stepsContainer .step-block');
+    blocks.forEach(function(block) {
+        var title = block.querySelector('input').value.trim();
+        var desc = block.querySelector('textarea').value.trim();
+        if (title || desc) {
+            steps.push({ title: title || 'Step', description: desc });
+        }
+    });
+    return steps;
+}
+
+function escapeHtml(text) {
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function generatePost() {
+    var data = {
+        productName: document.getElementById('productName').value.trim(),
+        benefitPromise: document.getElementById('benefitPromise').value.trim(),
+        vividHook: document.getElementById('vividHook').value.trim(),
+        relatableChallenge: document.getElementById('relatableChallenge').value.trim(),
+        discoveryStory: document.getElementById('discoveryStory').value.trim(),
+        teaserHook: document.getElementById('teaserHook').value.trim(),
+        mightNeed: getListValues('mightNeedList'),
+        packaging: document.getElementById('packaging').value.trim(),
+        shadeRange: document.getElementById('shadeRange').value.trim(),
+        pricePoint: document.getElementById('pricePoint').value.trim(),
+        applicationTools: getListValues('applicationToolsList'),
+        steps: getSteps(),
+        keyIngredients: document.getElementById('keyIngredients').value.trim(),
+        skinType: document.getElementById('skinType').value.trim(),
+        finishCoverage: document.getElementById('finishCoverage').value.trim(),
+        wearGeneral: document.getElementById('wearGeneral').value.trim(),
+        wearHumidity: document.getElementById('wearHumidity').value.trim(),
+        wearMasks: document.getElementById('wearMasks').value.trim(),
+        wearLongDay: document.getElementById('wearLongDay').value.trim(),
+        pros: getListValues('prosList'),
+        cons: getListValues('consList'),
+        comparisonProduct: document.getElementById('comparisonProduct').value.trim(),
+        comparisonDetails: document.getElementById('comparisonDetails').value.trim(),
+        repurchase: document.getElementById('repurchase').value.trim(),
+        bestFor: getListValues('bestForList'),
+        rating: currentRating,
+        ratingSummary: document.getElementById('ratingSummary').value.trim(),
+        mainProductLink: document.getElementById('mainProductLink').value.trim(),
+        relatedProducts: getListValues('relatedProductsList'),
+        dupeOption: document.getElementById('dupeOption').value.trim()
+    };
+
+    var markdown = buildMarkdown(data);
+    var html = buildHtml(data);
+
+    document.getElementById('outputPreview').innerHTML = html;
+    document.getElementById('rawOutput').textContent = markdown;
+
+    document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById('outputPanel').classList.add('active');
+    document.querySelector('.progress-bar').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildMarkdown(d) {
+    var md = '';
+
+    md += '# ' + (d.productName || '[Product Name]') + ': ' + (d.benefitPromise || '[Benefit-Driven Promise]') + '\n\n';
+    md += '## ' + (d.vividHook || '[Vivid First-Person Hook]') + '\n\n';
+
+    if (d.relatableChallenge || d.discoveryStory || d.teaserHook) {
+        if (d.relatableChallenge) md += d.relatableChallenge + '\n\n';
+        if (d.discoveryStory) md += d.discoveryStory + '\n\n';
+        if (d.teaserHook) md += d.teaserHook + '\n\n';
+    }
+
+    if (d.mightNeed.length > 0) {
+        md += '## What You Might Need\n\n';
+        d.mightNeed.forEach(function(item) { md += '- ' + item + '\n'; });
+        md += '\n';
+    }
+
+    md += '## First Impressions\n\n';
+
+    if (d.packaging) {
+        md += '### Packaging & Presentation\n\n';
+        md += d.packaging + '\n\n';
+    }
+
+    if (d.shadeRange) {
+        md += '### Shade Range & Inclusivity\n\n';
+        md += d.shadeRange + '\n\n';
+    }
+
+    if (d.pricePoint) {
+        md += '### Price Point\n\n';
+        md += d.pricePoint + '\n\n';
+    }
+
+    md += '## How to Apply It\n\n';
+
+    if (d.applicationTools.length > 0) {
+        md += '### What You\'ll Need\n\n';
+        d.applicationTools.forEach(function(item) { md += '- ' + item + '\n'; });
+        md += '\n';
+    }
+
+    if (d.steps.length > 0) {
+        md += '### Step-by-Step Application\n\n';
+        d.steps.forEach(function(step, i) {
+            md += '#### Step ' + (i + 1) + ': ' + step.title + '\n\n';
+            if (step.description) md += step.description + '\n\n';
+        });
+    }
+
+    md += '## The Formula Breakdown\n\n';
+
+    if (d.keyIngredients) {
+        md += '### Key Ingredients\n\n';
+        md += d.keyIngredients + '\n\n';
+    }
+
+    if (d.skinType) {
+        md += '### Skin Type Compatibility\n\n';
+        md += d.skinType + '\n\n';
+    }
+
+    if (d.finishCoverage) {
+        md += '### Finish & Coverage\n\n';
+        md += d.finishCoverage + '\n\n';
+    }
+
+    md += '## Wear Test Results\n\n';
+
+    if (d.wearGeneral) {
+        md += '### How It Holds Up Through the Day\n\n';
+        md += d.wearGeneral + '\n\n';
+    }
+
+    md += '### In Different Conditions\n\n';
+
+    if (d.wearHumidity) {
+        md += '#### Humidity & Heat\n\n';
+        md += d.wearHumidity + '\n\n';
+    }
+
+    if (d.wearMasks) {
+        md += '#### Under Masks or With Glasses\n\n';
+        md += d.wearMasks + '\n\n';
+    }
+
+    if (d.wearLongDay) {
+        md += '#### After a Long Day\n\n';
+        md += d.wearLongDay + '\n\n';
+    }
+
+    md += '## The Honest Pros & Cons\n\n';
+
+    if (d.pros.length > 0) {
+        md += '### What I Love\n\n';
+        d.pros.forEach(function(item) { md += '- ' + item + '\n'; });
+        md += '\n';
+    }
+
+    if (d.cons.length > 0) {
+        md += '### What Could Be Better\n\n';
+        d.cons.forEach(function(item) { md += '- ' + item + '\n'; });
+        md += '\n';
+    }
+
+    if (d.comparisonProduct) {
+        md += '## How It Compares\n\n';
+        md += '### ' + (d.productName || '[Product]') + ' vs. ' + d.comparisonProduct + '\n\n';
+        if (d.comparisonDetails) md += d.comparisonDetails + '\n\n';
+    }
+
+    md += '## Final Verdict\n\n';
+
+    if (d.repurchase) {
+        md += '### Would I Repurchase?\n\n';
+        md += d.repurchase + '\n\n';
+    }
+
+    if (d.bestFor.length > 0) {
+        md += '### Who This Is Best For\n\n';
+        d.bestFor.forEach(function(item) { md += '- ' + item + '\n'; });
+        md += '\n';
+    }
+
+    if (d.rating > 0) {
+        md += '### Rating\n\n';
+        var stars = '';
+        for (var i = 0; i < d.rating; i++) stars += '⭐';
+        md += stars + ' ' + d.rating + '/5';
+        if (d.ratingSummary) md += ' — ' + d.ratingSummary;
+        md += '\n\n';
+    }
+
+    if (d.mainProductLink || d.relatedProducts.length > 0 || d.dupeOption) {
+        md += '## Shop the Review\n\n';
+        if (d.mainProductLink) md += '- [' + (d.productName || 'Product') + '](' + d.mainProductLink + ')\n';
+        d.relatedProducts.forEach(function(item) { md += '- ' + item + '\n'; });
+        if (d.dupeOption) md += '- ' + d.dupeOption + '\n';
+        md += '\n';
+    }
+
+    return md;
+}
+
+function buildHtml(d) {
+    var h = '';
+
+    h += '<h1>' + escapeHtml(d.productName || '[Product Name]') + ': ' + escapeHtml(d.benefitPromise || '[Benefit-Driven Promise]') + '</h1>';
+    h += '<h2>' + escapeHtml(d.vividHook || '[Vivid First-Person Hook]') + '</h2>';
+
+    if (d.relatableChallenge) h += '<p>' + escapeHtml(d.relatableChallenge) + '</p>';
+    if (d.discoveryStory) h += '<p>' + escapeHtml(d.discoveryStory) + '</p>';
+    if (d.teaserHook) h += '<p><em>' + escapeHtml(d.teaserHook) + '</em></p>';
+
+    if (d.mightNeed.length > 0) {
+        h += '<h2>What You Might Need</h2><ul>';
+        d.mightNeed.forEach(function(item) { h += '<li>' + escapeHtml(item) + '</li>'; });
+        h += '</ul>';
+    }
+
+    h += '<h2>First Impressions</h2>';
+
+    if (d.packaging) {
+        h += '<h3>Packaging & Presentation</h3>';
+        h += '<p>' + escapeHtml(d.packaging) + '</p>';
+    }
+
+    if (d.shadeRange) {
+        h += '<h3>Shade Range & Inclusivity</h3>';
+        h += '<p>' + escapeHtml(d.shadeRange) + '</p>';
+    }
+
+    if (d.pricePoint) {
+        h += '<h3>Price Point</h3>';
+        h += '<p>' + escapeHtml(d.pricePoint) + '</p>';
+    }
+
+    h += '<h2>How to Apply It</h2>';
+
+    if (d.applicationTools.length > 0) {
+        h += '<h3>What You\'ll Need</h3><ul>';
+        d.applicationTools.forEach(function(item) { h += '<li>' + escapeHtml(item) + '</li>'; });
+        h += '</ul>';
+    }
+
+    if (d.steps.length > 0) {
+        h += '<h3>Step-by-Step Application</h3>';
+        d.steps.forEach(function(step, i) {
+            h += '<h4>Step ' + (i + 1) + ': ' + escapeHtml(step.title) + '</h4>';
+            if (step.description) h += '<p>' + escapeHtml(step.description) + '</p>';
+        });
+    }
+
+    h += '<h2>The Formula Breakdown</h2>';
+
+    if (d.keyIngredients) {
+        h += '<h3>Key Ingredients</h3>';
+        h += '<p>' + escapeHtml(d.keyIngredients) + '</p>';
+    }
+
+    if (d.skinType) {
+        h += '<h3>Skin Type Compatibility</h3>';
+        h += '<p>' + escapeHtml(d.skinType) + '</p>';
+    }
+
+    if (d.finishCoverage) {
+        h += '<h3>Finish & Coverage</h3>';
+        h += '<p>' + escapeHtml(d.finishCoverage) + '</p>';
+    }
+
+    h += '<h2>Wear Test Results</h2>';
+
+    if (d.wearGeneral) {
+        h += '<h3>How It Holds Up Through the Day</h3>';
+        h += '<p>' + escapeHtml(d.wearGeneral) + '</p>';
+    }
+
+    h += '<h3>In Different Conditions</h3>';
+
+    if (d.wearHumidity) {
+        h += '<h4>Humidity & Heat</h4>';
+        h += '<p>' + escapeHtml(d.wearHumidity) + '</p>';
+    }
+
+    if (d.wearMasks) {
+        h += '<h4>Under Masks or With Glasses</h4>';
+        h += '<p>' + escapeHtml(d.wearMasks) + '</p>';
+    }
+
+    if (d.wearLongDay) {
+        h += '<h4>After a Long Day</h4>';
+        h += '<p>' + escapeHtml(d.wearLongDay) + '</p>';
+    }
+
+    h += '<h2>The Honest Pros & Cons</h2>';
+
+    if (d.pros.length > 0) {
+        h += '<h3>What I Love</h3><ul>';
+        d.pros.forEach(function(item) { h += '<li>' + escapeHtml(item) + '</li>'; });
+        h += '</ul>';
+    }
+
+    if (d.cons.length > 0) {
+        h += '<h3>What Could Be Better</h3><ul>';
+        d.cons.forEach(function(item) { h += '<li>' + escapeHtml(item) + '</li>'; });
+        h += '</ul>';
+    }
+
+    if (d.comparisonProduct) {
+        h += '<h2>How It Compares</h2>';
+        h += '<h3>' + escapeHtml(d.productName || '[Product]') + ' vs. ' + escapeHtml(d.comparisonProduct) + '</h3>';
+        if (d.comparisonDetails) h += '<p>' + escapeHtml(d.comparisonDetails) + '</p>';
+    }
+
+    h += '<h2>Final Verdict</h2>';
+
+    if (d.repurchase) {
+        h += '<h3>Would I Repurchase?</h3>';
+        h += '<p>' + escapeHtml(d.repurchase) + '</p>';
+    }
+
+    if (d.bestFor.length > 0) {
+        h += '<h3>Who This Is Best For</h3><ul>';
+        d.bestFor.forEach(function(item) { h += '<li>' + escapeHtml(item) + '</li>'; });
+        h += '</ul>';
+    }
+
+    if (d.rating > 0) {
+        h += '<h3>Rating</h3>';
+        var stars = '';
+        for (var i = 0; i < d.rating; i++) stars += '⭐';
+        h += '<p class="rating-display">' + stars + ' <strong>' + d.rating + '/5</strong>';
+        if (d.ratingSummary) h += ' &mdash; ' + escapeHtml(d.ratingSummary);
+        h += '</p>';
+    }
+
+    if (d.mainProductLink || d.relatedProducts.length > 0 || d.dupeOption) {
+        h += '<h2>Shop the Review</h2><ul>';
+        if (d.mainProductLink) {
+            h += '<li><a href="' + escapeHtml(d.mainProductLink) + '" target="_blank">' + escapeHtml(d.productName || 'Product') + '</a></li>';
+        }
+        d.relatedProducts.forEach(function(item) { h += '<li>' + escapeHtml(item) + '</li>'; });
+        if (d.dupeOption) h += '<li>' + escapeHtml(d.dupeOption) + '</li>';
+        h += '</ul>';
+    }
+
+    return h;
+}
+
+function toggleView(view, btn) {
+    var preview = document.getElementById('outputPreview');
+    var raw = document.getElementById('rawOutput');
+    var buttons = document.querySelectorAll('.view-toggle button');
+
+    buttons.forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+
+    if (view === 'preview') {
+        preview.style.display = 'block';
+        raw.classList.remove('active');
+    } else {
+        preview.style.display = 'none';
+        raw.classList.add('active');
+    }
+}
+
+function copyOutput() {
+    var raw = document.getElementById('rawOutput');
+    var btn = document.getElementById('copyBtn');
+    var text = raw.textContent;
+
+    navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() {
+            btn.textContent = 'Copy to Clipboard';
+            btn.classList.remove('copied');
+        }, 2000);
+    });
+}
+
+function backToEdit() {
+    document.getElementById('outputPanel').classList.remove('active');
+    document.querySelector('.progress-bar').style.display = 'flex';
+    showSection(currentSection);
+}
+</script>
+
+</body>
+</html>
