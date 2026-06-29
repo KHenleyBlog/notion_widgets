@@ -286,12 +286,22 @@
         }
 
         function copyText(id) {
-            var text = document.getElementById(id).textContent;
+            var text = document.getElementById(id).innerText;
             navigator.clipboard.writeText(text).then(function() {
                 var btn = document.getElementById(id).parentElement.querySelector('.copy-btn');
                 btn.textContent = 'Copied!';
                 setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
             });
+        }
+
+        function boldKeywords(text, keywords) {
+            var escaped = keywords.map(function(k) {
+                return k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            });
+            escaped.sort(function(a, b) { return b.length - a.length; });
+            var pattern = new RegExp('(' + escaped.join('|') + ')', 'gi');
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(pattern, '<strong style="color:#e60023">$1</strong>');
         }
 
         function showError(msg) {
@@ -394,11 +404,19 @@
                 var shortDesc = shortMatch[1].trim();
                 var fullDesc = fullMatch[1].trim();
 
-                document.getElementById('shortResult').textContent = shortDesc;
+                var allKeywords = [keyword];
+                if (relatedKeywords) {
+                    relatedKeywords.split(',').forEach(function(k) {
+                        var trimmed = k.trim();
+                        if (trimmed) allKeywords.push(trimmed);
+                    });
+                }
+
+                document.getElementById('shortResult').innerHTML = boldKeywords(shortDesc, allKeywords);
                 document.getElementById('shortCount').textContent = shortDesc.length + ' / 150 chars';
                 document.getElementById('shortCount').style.color = shortDesc.length > 150 ? '#c62828' : '#999';
 
-                document.getElementById('fullResult').textContent = fullDesc;
+                document.getElementById('fullResult').innerHTML = boldKeywords(fullDesc, allKeywords);
                 document.getElementById('fullCount').textContent = fullDesc.length + ' / 500 chars';
                 document.getElementById('fullCount').style.color = fullDesc.length > 500 ? '#c62828' : '#999';
 
