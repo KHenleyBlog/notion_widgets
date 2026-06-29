@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinterest Description Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #fff;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #111;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        .field .hint {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 4px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #333;
+            background: #fafafa;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #e60023;
+            background: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .optional-tag {
+            font-weight: 400;
+            color: #aaa;
+            font-size: 11px;
+            margin-left: 4px;
+        }
+
+        button.generate {
+            width: 100%;
+            padding: 12px;
+            background: #e60023;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+
+        button.generate:hover {
+            background: #c2001e;
+        }
+
+        button.generate:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .results {
+            margin-top: 24px;
+            display: none;
+        }
+
+        .result-card {
+            background: #f8f8f8;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .result-card h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e60023;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .char-count {
+            font-size: 11px;
+            font-weight: 400;
+            color: #999;
+        }
+
+        .result-text {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        button.copy-btn {
+            background: none;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 11px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        button.copy-btn:hover {
+            border-color: #e60023;
+            color: #e60023;
+        }
+
+        .error-msg {
+            background: #fff0f0;
+            border: 1px solid #ffcdd2;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .api-key-field {
+            position: relative;
+        }
+
+        .api-key-field .toggle-visibility {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 4px;
+        }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pinterest Description Generator</h1>
+        <p class="subtitle">Generate editorial, conversational pin descriptions from your blog post.</p>
+
+        <div class="field">
+            <label for="apiKey">Anthropic API Key</label>
+            <div class="api-key-field">
+                <input type="password" id="apiKey" placeholder="sk-ant-..." />
+                <button class="toggle-visibility" onclick="toggleApiKey()" aria-label="Toggle API key visibility">show</button>
+            </div>
+            <p class="hint">Your key is only used in-browser and never stored on any server.</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field">
+            <label for="summary">Blog Post Summary</label>
+            <textarea id="summary" placeholder="Paste a brief summary of your blog post..."></textarea>
+        </div>
+
+        <div class="field">
+            <label for="keyword">Primary Keyword</label>
+            <input type="text" id="keyword" placeholder="e.g. meal prep for beginners" />
+        </div>
+
+        <div class="field">
+            <label for="audience">Target Audience <span class="optional-tag">optional</span></label>
+            <input type="text" id="audience" placeholder="e.g. busy parents, college students" />
+        </div>
+
+        <button class="generate" id="generateBtn" onclick="generate()">Generate Descriptions</button>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+        <div class="results" id="results">
+            <div class="result-card">
+                <h3>Short Description <span class="char-count" id="shortCount"></span></h3>
+                <p class="result-text" id="shortResult"></p>
+                <button class="copy-btn" onclick="copyText('shortResult')">Copy</button>
+            </div>
+            <div class="result-card">
+                <h3>Full Description <span class="char-count" id="fullCount"></span></h3>
+                <p class="result-text" id="fullResult"></p>
+                <button class="copy-btn" onclick="copyText('fullResult')">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleApiKey() {
+            var input = document.getElementById('apiKey');
+            var btn = input.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = 'hide';
+            } else {
+                input.type = 'password';
+                btn.textContent = 'show';
+            }
+        }
+
+        function copyText(id) {
+            var text = document.getElementById(id).textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                var btn = document.getElementById(id).parentElement.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+            });
+        }
+
+        function showError(msg) {
+            var el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('errorMsg').style.display = 'none';
+        }
+
+        async function generate() {
+            hideError();
+
+            var apiKey = document.getElementById('apiKey').value.trim();
+            var summary = document.getElementById('summary').value.trim();
+            var keyword = document.getElementById('keyword').value.trim();
+            var audience = document.getElementById('audience').value.trim();
+
+            if (!apiKey) { showError('Please enter your Anthropic API key.'); return; }
+            if (!summary) { showError('Please enter a blog post summary.'); return; }
+            if (!keyword) { showError('Please enter a primary keyword.'); return; }
+
+            var btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Generating...';
+            document.getElementById('results').style.display = 'none';
+
+            var audienceLine = audience
+                ? '\n- Target audience: ' + audience
+                : '';
+
+            var prompt = 'You are a Pinterest description writer for a lifestyle and editorial blog. ' +
+                'Your tone is conversational and editorial — like a knowledgeable friend sharing a great find. ' +
+                'Never sound salesy, pushy, or like an ad. Avoid hype words like "amazing," "incredible," "game-changer," or "you need this." ' +
+                'Write in a warm, natural voice that feels human.\n\n' +
+                'Given the following blog post details, write two Pinterest pin descriptions:\n\n' +
+                '1. **Short description**: Under 150 characters. A punchy, curiosity-driven line that makes someone want to click. ' +
+                'Naturally include the primary keyword.\n' +
+                '2. **Full description**: Under 500 characters. A slightly longer version that gives more context about the post, ' +
+                'uses the primary keyword naturally, and ends with a soft call to action (like "Read more on the blog" or "Tap to get the full guide"). ' +
+                'Do not use hashtags.\n\n' +
+                'Blog post details:\n' +
+                '- Summary: ' + summary + '\n' +
+                '- Primary keyword: ' + keyword +
+                audienceLine + '\n\n' +
+                'Respond in exactly this format and nothing else:\n' +
+                'SHORT: [your short description]\n' +
+                'FULL: [your full description]';
+
+            try {
+                var response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': apiKey,
+                        'anthropic-version': '2023-06-01',
+                        'anthropic-dangerous-direct-browser-access': 'true'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-6',
+                        max_tokens: 1024,
+                        messages: [
+                            { role: 'user', content: prompt }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    var errData = await response.json().catch(function() { return {}; });
+                    var errMsg = (errData.error && errData.error.message) || 'API request failed (' + response.status + ')';
+                    throw new Error(errMsg);
+                }
+
+                var data = await response.json();
+                var text = data.content[0].text;
+
+                var shortMatch = text.match(/SHORT:\s*(.+)/);
+                var fullMatch = text.match(/FULL:\s*([\s\S]+)/);
+
+                if (!shortMatch || !fullMatch) {
+                    throw new Error('Unexpected response format. Please try again.');
+                }
+
+                var shortDesc = shortMatch[1].trim();
+                var fullDesc = fullMatch[1].trim();
+
+                document.getElementById('shortResult').textContent = shortDesc;
+                document.getElementById('shortCount').textContent = shortDesc.length + ' / 150 chars';
+                document.getElementById('shortCount').style.color = shortDesc.length > 150 ? '#c62828' : '#999';
+
+                document.getElementById('fullResult').textContent = fullDesc;
+                document.getElementById('fullCount').textContent = fullDesc.length + ' / 500 chars';
+                document.getElementById('fullCount').style.color = fullDesc.length > 500 ? '#c62828' : '#999';
+
+                document.getElementById('results').style.display = 'block';
+
+            } catch (err) {
+                showError(err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Generate Descriptions';
+            }
+        }
+    </script>
+</body>
+</html>
