@@ -249,7 +249,7 @@
         </div>
 
         <div class="field">
-            <label for="relatedKeywords">Related Keywords <span class="optional-tag">optional</span></label>
+            <label for="relatedKeywords">Related Keywords</label>
             <input type="text" id="relatedKeywords" placeholder="e.g. weekly meal plan, easy recipes, budget cooking" />
             <p class="hint">Comma-separated keywords to weave into descriptions naturally.</p>
         </div>
@@ -326,6 +326,7 @@
             if (!apiKey) { showError('Please enter your Anthropic API key.'); return; }
             if (!summary) { showError('Please enter a blog post summary.'); return; }
             if (!keyword) { showError('Please enter a primary keyword.'); return; }
+            if (!relatedKeywords) { showError('Please add at least one related keyword.'); return; }
 
             var btn = document.getElementById('generateBtn');
             btn.disabled = true;
@@ -334,10 +335,6 @@
 
             var audienceLine = audience
                 ? '\n- Target audience: ' + audience
-                : '';
-
-            var relatedLine = relatedKeywords
-                ? '\n- Related keywords: ' + relatedKeywords
                 : '';
 
             var prompt = 'You are a Pinterest description writer for a lifestyle and editorial blog. ' +
@@ -350,19 +347,16 @@
                 '2. **Full description**: Under 500 characters. A slightly longer version that gives more context about the post, ' +
                 'uses the primary keyword naturally, and ends with a soft call to action (like "Read more on the blog" or "Tap to get the full guide"). ' +
                 'Do not use hashtags.\n\n' +
-                'IMPORTANT rules for related keywords:\n' +
-                '- Treat related keywords as context, not requirements.\n' +
-                '- Only use one or two if they fit naturally into a sentence you would already be writing.\n' +
-                '- If a related keyword would make a sentence sound unnatural, omit it entirely.\n' +
-                '- Never string keywords together or list them.\n' +
-                '- The primary keyword is the only one that must appear.\n\n' +
+                'Work in 1-2 of these phrases where they fit naturally into a sentence you are already writing: ' + relatedKeywords + '. ' +
+                'Do not list them. Do not force them. But do actively try to include them.\n' +
+                'Never string keywords together or list them. ' +
+                'If a related keyword would make a sentence sound unnatural, omit it.\n\n' +
                 'BAD example (keyword stuffing): "This tinted mineral sunscreen for dark skin with iron oxides and no white cast SPF for melanin is perfect for hyperpigmentation."\n' +
                 'GOOD example (natural writing): "Finally a mineral SPF that disappears on deeper skin tones — no white cast, just buildable coverage that works."\n\n' +
                 'Blog post details:\n' +
                 '- Summary: ' + summary + '\n' +
                 '- Primary keyword: ' + keyword +
-                audienceLine +
-                relatedLine + '\n\n' +
+                audienceLine + '\n\n' +
                 'Respond in exactly this format and nothing else:\n' +
                 'SHORT: [your short description]\n' +
                 'FULL: [your full description]';
