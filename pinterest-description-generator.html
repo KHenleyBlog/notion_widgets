@@ -248,6 +248,12 @@
             <input type="text" id="audience" placeholder="e.g. busy parents, college students" />
         </div>
 
+        <div class="field">
+            <label for="relatedKeywords">Related Keywords <span class="optional-tag">optional</span></label>
+            <input type="text" id="relatedKeywords" placeholder="e.g. weekly meal plan, easy recipes, budget cooking" />
+            <p class="hint">Comma-separated keywords to weave into descriptions naturally.</p>
+        </div>
+
         <button class="generate" id="generateBtn" onclick="generate()">Generate Descriptions</button>
 
         <div class="error-msg" id="errorMsg"></div>
@@ -305,6 +311,7 @@
             var summary = document.getElementById('summary').value.trim();
             var keyword = document.getElementById('keyword').value.trim();
             var audience = document.getElementById('audience').value.trim();
+            var relatedKeywords = document.getElementById('relatedKeywords').value.trim();
 
             if (!apiKey) { showError('Please enter your Anthropic API key.'); return; }
             if (!summary) { showError('Please enter a blog post summary.'); return; }
@@ -319,6 +326,10 @@
                 ? '\n- Target audience: ' + audience
                 : '';
 
+            var relatedLine = relatedKeywords
+                ? '\n- Related keywords: ' + relatedKeywords
+                : '';
+
             var prompt = 'You are a Pinterest description writer for a lifestyle and editorial blog. ' +
                 'Your tone is conversational and editorial — like a knowledgeable friend sharing a great find. ' +
                 'Never sound salesy, pushy, or like an ad. Avoid hype words like "amazing," "incredible," "game-changer," or "you need this." ' +
@@ -328,11 +339,13 @@
                 'Naturally include the primary keyword.\n' +
                 '2. **Full description**: Under 500 characters. A slightly longer version that gives more context about the post, ' +
                 'uses the primary keyword naturally, and ends with a soft call to action (like "Read more on the blog" or "Tap to get the full guide"). ' +
+                'If related keywords are provided, weave one or two into the full description naturally — do not force them all in. ' +
                 'Do not use hashtags.\n\n' +
                 'Blog post details:\n' +
                 '- Summary: ' + summary + '\n' +
                 '- Primary keyword: ' + keyword +
-                audienceLine + '\n\n' +
+                audienceLine +
+                relatedLine + '\n\n' +
                 'Respond in exactly this format and nothing else:\n' +
                 'SHORT: [your short description]\n' +
                 'FULL: [your full description]';
