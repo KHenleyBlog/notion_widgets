@@ -319,16 +319,16 @@
 
     <!-- COLUMN 1 -->
     <div class="section">
-        <div class="section-header">Column 1 — Main Keyword</div>
+        <div class="section-header">Column 1 — Keyword 1</div>
         <div class="col-section">
             <div class="field">
-                <label for="mainKeyword">Main Keyword</label>
-                <input type="text" id="mainKeyword" placeholder="e.g. moisturizer for oily skin" />
+                <label for="keyword1">Keyword 1</label>
+                <input type="text" id="keyword1" placeholder="e.g. moisturizer for oily skin" />
                 <p class="hint">Used in titles and overlays only.</p>
             </div>
             <div class="field">
-                <label for="mainVariations">Keyword Variations</label>
-                <input type="text" id="mainVariations" placeholder="e.g. best moisturizer oily skin, oily skin moisturizer routine" />
+                <label for="keyword1Variations">Keyword Variations</label>
+                <input type="text" id="keyword1Variations" placeholder="e.g. best moisturizer oily skin, oily skin moisturizer routine" />
                 <p class="hint">Comma-separated. Woven naturally into descriptions only.</p>
             </div>
         </div>
@@ -336,16 +336,16 @@
 
     <!-- COLUMN 2 -->
     <div class="section">
-        <div class="section-header">Column 2 — Related Keyword 1</div>
+        <div class="section-header">Column 2 — Keyword 2</div>
         <div class="col-section">
             <div class="field">
-                <label for="rk1">Related Keyword 1</label>
-                <input type="text" id="rk1" placeholder="e.g. lightweight face moisturizer" />
+                <label for="keyword2">Keyword 2</label>
+                <input type="text" id="keyword2" placeholder="e.g. lightweight face moisturizer" />
                 <p class="hint">Used in titles and overlays only.</p>
             </div>
             <div class="field">
-                <label for="rk1Variations">Keyword Variations</label>
-                <input type="text" id="rk1Variations" placeholder="e.g. lightweight moisturizer for face, hydrating lightweight moisturizer" />
+                <label for="keyword2Variations">Keyword Variations</label>
+                <input type="text" id="keyword2Variations" placeholder="e.g. lightweight moisturizer for face, hydrating lightweight moisturizer" />
                 <p class="hint">Comma-separated. Woven naturally into descriptions only.</p>
             </div>
         </div>
@@ -353,16 +353,16 @@
 
     <!-- COLUMN 3 -->
     <div class="section">
-        <div class="section-header">Column 3 — Related Keyword 2</div>
+        <div class="section-header">Column 3 — Keyword 3</div>
         <div class="col-section">
             <div class="field">
-                <label for="rk2">Related Keyword 2</label>
-                <input type="text" id="rk2" placeholder="e.g. non-greasy moisturizer" />
+                <label for="keyword3">Keyword 3</label>
+                <input type="text" id="keyword3" placeholder="e.g. non-greasy moisturizer" />
                 <p class="hint">Used in titles and overlays only.</p>
             </div>
             <div class="field">
-                <label for="rk2Variations">Keyword Variations</label>
-                <input type="text" id="rk2Variations" placeholder="e.g. non-greasy face cream, moisturizer that doesn't feel heavy" />
+                <label for="keyword3Variations">Keyword Variations</label>
+                <input type="text" id="keyword3Variations" placeholder="e.g. non-greasy face cream, moisturizer that doesn't feel heavy" />
                 <p class="hint">Comma-separated. Woven naturally into descriptions only.</p>
             </div>
         </div>
@@ -463,14 +463,14 @@
         return card;
     }
 
-    function renderResults(pins, mainKeyword, mainVars, rk1, rk1Vars, rk2, rk2Vars) {
+    function renderResults(pins, keyword1, keyword1Vars, keyword2, keyword2Vars, keyword3, keyword3Vars) {
         var grid = document.getElementById('resultsGrid');
         grid.innerHTML = '';
 
         var columns = [
-            { keyword: mainKeyword, variations: mainVars, pin1: pins.c1p1, pin2: pins.c1p2 },
-            { keyword: rk1,         variations: rk1Vars,  pin1: pins.c2p1, pin2: pins.c2p2 },
-            { keyword: rk2,         variations: rk2Vars,  pin1: pins.c3p1, pin2: pins.c3p2 }
+            { keyword: keyword1, variations: keyword1Vars, pin1: pins.c1p1, pin2: pins.c1p2 },
+            { keyword: keyword2, variations: keyword2Vars, pin1: pins.c2p1, pin2: pins.c2p2 },
+            { keyword: keyword3, variations: keyword3Vars, pin1: pins.c3p1, pin2: pins.c3p2 }
         ];
 
         columns.forEach(function(col) {
@@ -498,29 +498,29 @@
     async function generate() {
         hideError();
 
-        var apiKey       = document.getElementById('apiKey').value.trim();
-        var summary      = document.getElementById('summary').value.trim();
-        var readerIntent = document.getElementById('readerIntent').value.trim();
-        var mainKeyword  = document.getElementById('mainKeyword').value.trim();
-        var mainVarRaw   = document.getElementById('mainVariations').value.trim();
-        var rk1          = document.getElementById('rk1').value.trim();
-        var rk1VarRaw    = document.getElementById('rk1Variations').value.trim();
-        var rk2          = document.getElementById('rk2').value.trim();
-        var rk2VarRaw    = document.getElementById('rk2Variations').value.trim();
+        var apiKey         = document.getElementById('apiKey').value.trim();
+        var summary        = document.getElementById('summary').value.trim();
+        var readerIntent   = document.getElementById('readerIntent').value.trim();
+        var keyword1       = document.getElementById('keyword1').value.trim();
+        var keyword1VarRaw = document.getElementById('keyword1Variations').value.trim();
+        var keyword2       = document.getElementById('keyword2').value.trim();
+        var keyword2VarRaw = document.getElementById('keyword2Variations').value.trim();
+        var keyword3       = document.getElementById('keyword3').value.trim();
+        var keyword3VarRaw = document.getElementById('keyword3Variations').value.trim();
 
-        if (!apiKey)       { showError('Please enter your Anthropic API key.'); return; }
-        if (!summary)      { showError('Please enter a blog post summary.'); return; }
-        if (!readerIntent) { showError('Please enter a reader intent.'); return; }
-        if (!mainKeyword)  { showError('Please enter a main keyword for Column 1.'); return; }
-        if (!mainVarRaw)   { showError('Please enter keyword variations for Column 1.'); return; }
-        if (!rk1)          { showError('Please enter a related keyword for Column 2.'); return; }
-        if (!rk1VarRaw)    { showError('Please enter keyword variations for Column 2.'); return; }
-        if (!rk2)          { showError('Please enter a related keyword for Column 3.'); return; }
-        if (!rk2VarRaw)    { showError('Please enter keyword variations for Column 3.'); return; }
+        if (!apiKey)         { showError('Please enter your Anthropic API key.'); return; }
+        if (!summary)        { showError('Please enter a blog post summary.'); return; }
+        if (!readerIntent)   { showError('Please enter a reader intent.'); return; }
+        if (!keyword1)       { showError('Please enter Keyword 1.'); return; }
+        if (!keyword1VarRaw) { showError('Please enter keyword variations for Column 1.'); return; }
+        if (!keyword2)       { showError('Please enter Keyword 2.'); return; }
+        if (!keyword2VarRaw) { showError('Please enter keyword variations for Column 2.'); return; }
+        if (!keyword3)       { showError('Please enter Keyword 3.'); return; }
+        if (!keyword3VarRaw) { showError('Please enter keyword variations for Column 3.'); return; }
 
-        var mainVars = parseVariations(mainVarRaw);
-        var rk1Vars  = parseVariations(rk1VarRaw);
-        var rk2Vars  = parseVariations(rk2VarRaw);
+        var keyword1Vars = parseVariations(keyword1VarRaw);
+        var keyword2Vars = parseVariations(keyword2VarRaw);
+        var keyword3Vars = parseVariations(keyword3VarRaw);
 
         var btn = document.getElementById('generateBtn');
         btn.disabled = true;
@@ -538,9 +538,9 @@
             '- Reader intent: ' + readerIntent + '\n\n' +
 
             'KEYWORD ASSIGNMENTS:\n' +
-            '- Column 1 anchor keyword: "' + mainKeyword + '" | Variations: ' + mainVarRaw + '\n' +
-            '- Column 2 anchor keyword: "' + rk1 + '" | Variations: ' + rk1VarRaw + '\n' +
-            '- Column 3 anchor keyword: "' + rk2 + '" | Variations: ' + rk2VarRaw + '\n\n' +
+            '- Column 1 anchor keyword: "' + keyword1 + '" | Variations: ' + keyword1VarRaw + '\n' +
+            '- Column 2 anchor keyword: "' + keyword2 + '" | Variations: ' + keyword2VarRaw + '\n' +
+            '- Column 3 anchor keyword: "' + keyword3 + '" | Variations: ' + keyword3VarRaw + '\n\n' +
 
             'TASK:\n' +
             'Generate 3 columns, 2 pin sets each (6 total). Each pin set has a title, description, and text overlay.\n\n' +
@@ -616,7 +616,7 @@
                 if (!pins[required[i]]) throw new Error('Incomplete response. Please try again.');
             }
 
-            renderResults(pins, mainKeyword, mainVars, rk1, rk1Vars, rk2, rk2Vars);
+            renderResults(pins, keyword1, keyword1Vars, keyword2, keyword2Vars, keyword3, keyword3Vars);
 
         } catch (err) {
             showError(err.message);
