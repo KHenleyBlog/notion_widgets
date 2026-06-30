@@ -17,9 +17,9 @@
         /* ── FORM ─────────────────────────────────────── */
 
         .form-wrap {
-            max-width: 600px;
+            max-width: 680px;
             margin: 0 auto;
-            padding: 28px 24px 8px;
+            padding: 28px 24px 40px;
         }
 
         h1 {
@@ -32,7 +32,39 @@
         .subtitle {
             font-size: 13px;
             color: #888;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
+        }
+
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-header {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #e60023;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e60023;
+        }
+
+        .col-section {
+            background: #fafafa;
+            border: 1px solid #ebebeb;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .col-section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #bbb;
+            margin-bottom: 12px;
         }
 
         label {
@@ -40,7 +72,7 @@
             font-size: 13px;
             font-weight: 600;
             color: #555;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .optional-tag {
@@ -50,18 +82,13 @@
             margin-left: 4px;
         }
 
-        .field { margin-bottom: 16px; }
+        .field { margin-bottom: 14px; }
+        .field:last-child { margin-bottom: 0; }
 
         .field .hint {
             font-size: 11px;
             color: #bbb;
             margin-top: 4px;
-        }
-
-        .keyword-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
         }
 
         input[type="text"],
@@ -74,7 +101,7 @@
             font-size: 14px;
             font-family: inherit;
             color: #333;
-            background: #fafafa;
+            background: #fff;
             transition: border-color 0.2s;
         }
 
@@ -83,7 +110,6 @@
         textarea:focus {
             outline: none;
             border-color: #e60023;
-            background: #fff;
         }
 
         textarea { resize: vertical; min-height: 90px; }
@@ -102,8 +128,6 @@
             font-size: 12px;
             padding: 4px;
         }
-
-        .divider { height: 1px; background: #eee; margin: 20px 0; }
 
         button.generate {
             width: 100%;
@@ -147,13 +171,19 @@
             display: none;
         }
 
-        /* ── RESULTS GRID ──────────────────────────────── */
+        /* ── RESULTS ───────────────────────────────────── */
 
         .results-wrap {
             max-width: 1100px;
-            margin: 32px auto 48px;
+            margin: 0 auto 56px;
             padding: 0 20px;
             display: none;
+        }
+
+        .results-divider {
+            height: 1px;
+            background: #eee;
+            margin-bottom: 32px;
         }
 
         .results-grid {
@@ -178,82 +208,63 @@
         .pin-card {
             background: #f9f9f9;
             border: 1px solid #ebebeb;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 20px;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
         }
 
-        .pin-image-placeholder {
-            width: 100%;
-            aspect-ratio: 2 / 3;
-            background: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            border-bottom: 1px solid #e8e8e8;
-            position: relative;
-        }
+        .pin-card:last-child { margin-bottom: 0; }
 
-        .pin-image-placeholder .overlay-preview {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.55);
-            color: #fff;
-            font-size: 12px;
-            font-weight: 600;
-            text-align: center;
-            padding: 10px 12px;
-            line-height: 1.4;
-        }
-
-        .pin-image-placeholder .img-label {
-            font-size: 11px;
-            color: #bbb;
-            text-align: center;
-        }
-
-        .pin-image-placeholder svg {
-            opacity: 0.25;
-        }
-
-        .pin-body { padding: 14px; }
-
-        .pin-label {
+        .pin-num {
             font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.07em;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .pin-field-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
             color: #bbb;
             margin-bottom: 4px;
+            margin-top: 12px;
         }
+
+        .pin-field-label:first-of-type { margin-top: 0; }
 
         .pin-title {
             font-size: 14px;
             font-weight: 700;
             color: #111;
             line-height: 1.4;
-            margin-bottom: 12px;
         }
 
         .pin-description {
             font-size: 13px;
             color: #444;
             line-height: 1.6;
-            margin-bottom: 12px;
+        }
+
+        .pin-overlay {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.4;
         }
 
         .char-count {
             font-size: 10px;
             color: #bbb;
-            margin-top: -8px;
-            margin-bottom: 10px;
+            margin-top: 3px;
         }
 
         .char-count.over { color: #c62828; }
+
+        .pin-divider { height: 1px; background: #e8e8e8; margin: 10px 0; }
 
         button.copy-btn {
             background: none;
@@ -264,25 +275,24 @@
             color: #888;
             cursor: pointer;
             transition: all 0.15s;
-            margin-top: 2px;
+            margin-top: 10px;
         }
 
         button.copy-btn:hover { border-color: #e60023; color: #e60023; }
 
-        .pin-divider { height: 1px; background: #eee; margin: 10px 0; }
-
-        @media (max-width: 700px) {
+        @media (max-width: 720px) {
             .results-grid { grid-template-columns: 1fr; }
-            .keyword-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div class="form-wrap">
-        <h1>Pinterest Description Generator</h1>
-        <p class="subtitle">Generate 6 unique pin sets across 3 keyword columns from a single blog post.</p>
+<div class="form-wrap">
+    <h1>Pinterest Description Generator</h1>
+    <p class="subtitle">3 columns · 2 pins each · 6 unique pin sets from one blog post.</p>
 
+    <!-- API KEY -->
+    <div class="section">
         <div class="field">
             <label for="apiKey">Anthropic API Key</label>
             <div class="api-key-wrap">
@@ -291,267 +301,326 @@
             </div>
             <p class="hint">Used only in-browser. Never stored.</p>
         </div>
+    </div>
 
-        <div class="divider"></div>
-
+    <!-- OVERVIEW -->
+    <div class="section">
+        <div class="section-header">Overview</div>
         <div class="field">
             <label for="summary">Blog Post Summary</label>
             <textarea id="summary" placeholder="Paste a brief summary of your blog post..."></textarea>
         </div>
-
         <div class="field">
-            <label for="mainKeyword">Main Keyword</label>
-            <input type="text" id="mainKeyword" placeholder="e.g. meal prep for beginners" />
+            <label for="readerIntent">Reader Intent</label>
+            <input type="text" id="readerIntent" placeholder="e.g. find a moisturizer that won't make their skin greasy by midday" />
+            <p class="hint">What is the reader trying to solve or accomplish?</p>
         </div>
+    </div>
 
-        <div class="field">
-            <label for="audience">Target Audience <span class="optional-tag">optional</span></label>
-            <input type="text" id="audience" placeholder="e.g. busy parents, college students" />
-        </div>
-
-        <div class="field">
-            <label>Related Keywords</label>
-            <div class="keyword-row">
-                <div>
-                    <input type="text" id="relatedKeyword1" placeholder="Related keyword 1" />
-                </div>
-                <div>
-                    <input type="text" id="relatedKeyword2" placeholder="Related keyword 2" />
-                </div>
+    <!-- COLUMN 1 -->
+    <div class="section">
+        <div class="section-header">Column 1 — Main Keyword</div>
+        <div class="col-section">
+            <div class="field">
+                <label for="mainKeyword">Main Keyword</label>
+                <input type="text" id="mainKeyword" placeholder="e.g. moisturizer for oily skin" />
+                <p class="hint">Used in titles and overlays only.</p>
             </div>
-            <p class="hint">Each becomes its own column with 2 unique pin sets.</p>
+            <div class="field">
+                <label for="mainVariations">Keyword Variations</label>
+                <input type="text" id="mainVariations" placeholder="e.g. best moisturizer oily skin, oily skin moisturizer routine" />
+                <p class="hint">Comma-separated. Woven naturally into descriptions only.</p>
+            </div>
         </div>
-
-        <button class="generate" id="generateBtn" onclick="generate()">Generate 6 Pin Sets</button>
-
-        <div class="error-msg" id="errorMsg"></div>
     </div>
 
-    <div class="results-wrap" id="resultsWrap">
-        <div class="results-grid" id="resultsGrid"></div>
+    <!-- COLUMN 2 -->
+    <div class="section">
+        <div class="section-header">Column 2 — Related Keyword 1</div>
+        <div class="col-section">
+            <div class="field">
+                <label for="rk1">Related Keyword 1</label>
+                <input type="text" id="rk1" placeholder="e.g. lightweight face moisturizer" />
+                <p class="hint">Used in titles and overlays only.</p>
+            </div>
+            <div class="field">
+                <label for="rk1Variations">Keyword Variations</label>
+                <input type="text" id="rk1Variations" placeholder="e.g. lightweight moisturizer for face, hydrating lightweight moisturizer" />
+                <p class="hint">Comma-separated. Woven naturally into descriptions only.</p>
+            </div>
+        </div>
     </div>
 
-    <script>
-        function toggleApiKey() {
-            var input = document.getElementById('apiKey');
-            var btn = input.nextElementSibling;
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.textContent = 'hide';
-            } else {
-                input.type = 'password';
-                btn.textContent = 'show';
-            }
-        }
+    <!-- COLUMN 3 -->
+    <div class="section">
+        <div class="section-header">Column 3 — Related Keyword 2</div>
+        <div class="col-section">
+            <div class="field">
+                <label for="rk2">Related Keyword 2</label>
+                <input type="text" id="rk2" placeholder="e.g. non-greasy moisturizer" />
+                <p class="hint">Used in titles and overlays only.</p>
+            </div>
+            <div class="field">
+                <label for="rk2Variations">Keyword Variations</label>
+                <input type="text" id="rk2Variations" placeholder="e.g. non-greasy face cream, moisturizer that doesn't feel heavy" />
+                <p class="hint">Comma-separated. Woven naturally into descriptions only.</p>
+            </div>
+        </div>
+    </div>
 
-        function showError(msg) {
-            var el = document.getElementById('errorMsg');
-            el.textContent = msg;
-            el.style.display = 'block';
-        }
+    <button class="generate" id="generateBtn" onclick="generate()">Generate 6 Pin Sets</button>
+    <div class="error-msg" id="errorMsg"></div>
+</div>
 
-        function hideError() {
-            document.getElementById('errorMsg').style.display = 'none';
-        }
+<!-- RESULTS -->
+<div class="results-wrap" id="resultsWrap">
+    <div class="results-divider"></div>
+    <div class="results-grid" id="resultsGrid"></div>
+</div>
 
-        function boldKeyword(text, keyword) {
-            var escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+<script>
+    function toggleApiKey() {
+        var input = document.getElementById('apiKey');
+        var btn = input.nextElementSibling;
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = 'hide';
+        } else {
+            input.type = 'password';
+            btn.textContent = 'show';
+        }
+    }
+
+    function showError(msg) {
+        var el = document.getElementById('errorMsg');
+        el.textContent = msg;
+        el.style.display = 'block';
+    }
+
+    function hideError() {
+        document.getElementById('errorMsg').style.display = 'none';
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function boldWord(text, keyword) {
+        if (!keyword) return escapeHtml(text);
+        var escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var pattern = new RegExp('(' + escaped + ')', 'gi');
+        return escapeHtml(text).replace(pattern, '<strong style="color:#e60023">$1</strong>');
+    }
+
+    function boldVariations(text, variations) {
+        var result = escapeHtml(text);
+        variations.forEach(function(v) {
+            if (!v) return;
+            var escaped = v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             var pattern = new RegExp('(' + escaped + ')', 'gi');
-            return text
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                .replace(pattern, '<strong style="color:#e60023">$1</strong>');
-        }
+            result = result.replace(pattern, '<strong style="color:#e60023">$1</strong>');
+        });
+        return result;
+    }
 
-        function copyPlain(text, btn) {
-            navigator.clipboard.writeText(text).then(function() {
-                btn.textContent = 'Copied!';
-                setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+    function copyText(text, btn) {
+        navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = 'Copied!';
+            setTimeout(function() { btn.textContent = 'Copy all'; }, 1500);
+        });
+    }
+
+    function buildPinCard(pinData, anchorKeyword, variations, pinNum) {
+        var title = pinData.title || '';
+        var description = pinData.description || '';
+        var overlay = pinData.overlay || '';
+        var descLen = description.length;
+
+        var card = document.createElement('div');
+        card.className = 'pin-card';
+
+        var plainText = 'TITLE\n' + title + '\n\nDESCRIPTION\n' + description + '\n\nTEXT OVERLAY\n' + overlay;
+
+        card.innerHTML =
+            '<div class="pin-num">Pin ' + pinNum + '</div>' +
+
+            '<div class="pin-field-label">Title</div>' +
+            '<div class="pin-title">' + boldWord(title, anchorKeyword) + '</div>' +
+
+            '<div class="pin-divider"></div>' +
+
+            '<div class="pin-field-label">Description</div>' +
+            '<div class="pin-description">' + boldVariations(description, variations) + '</div>' +
+            '<div class="char-count' + (descLen > 500 ? ' over' : '') + '">' + descLen + ' / 500 chars</div>' +
+
+            '<div class="pin-divider"></div>' +
+
+            '<div class="pin-field-label">Text Overlay</div>' +
+            '<div class="pin-overlay">' + boldWord(overlay, anchorKeyword) + '</div>' +
+
+            '<br><button class="copy-btn" onclick="copyText(' + JSON.stringify(plainText) + ', this)">Copy all</button>';
+
+        return card;
+    }
+
+    function renderResults(pins, mainKeyword, mainVars, rk1, rk1Vars, rk2, rk2Vars) {
+        var grid = document.getElementById('resultsGrid');
+        grid.innerHTML = '';
+
+        var columns = [
+            { keyword: mainKeyword, variations: mainVars, pin1: pins.c1p1, pin2: pins.c1p2 },
+            { keyword: rk1,         variations: rk1Vars,  pin1: pins.c2p1, pin2: pins.c2p2 },
+            { keyword: rk2,         variations: rk2Vars,  pin1: pins.c3p1, pin2: pins.c3p2 }
+        ];
+
+        columns.forEach(function(col) {
+            var colEl = document.createElement('div');
+
+            var header = document.createElement('div');
+            header.className = 'col-header';
+            header.textContent = col.keyword;
+            colEl.appendChild(header);
+
+            colEl.appendChild(buildPinCard(col.pin1, col.keyword, col.variations, 1));
+            colEl.appendChild(buildPinCard(col.pin2, col.keyword, col.variations, 2));
+
+            grid.appendChild(colEl);
+        });
+
+        document.getElementById('resultsWrap').style.display = 'block';
+        document.getElementById('resultsWrap').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function parseVariations(str) {
+        return str.split(',').map(function(v) { return v.trim(); }).filter(Boolean);
+    }
+
+    async function generate() {
+        hideError();
+
+        var apiKey       = document.getElementById('apiKey').value.trim();
+        var summary      = document.getElementById('summary').value.trim();
+        var readerIntent = document.getElementById('readerIntent').value.trim();
+        var mainKeyword  = document.getElementById('mainKeyword').value.trim();
+        var mainVarRaw   = document.getElementById('mainVariations').value.trim();
+        var rk1          = document.getElementById('rk1').value.trim();
+        var rk1VarRaw    = document.getElementById('rk1Variations').value.trim();
+        var rk2          = document.getElementById('rk2').value.trim();
+        var rk2VarRaw    = document.getElementById('rk2Variations').value.trim();
+
+        if (!apiKey)       { showError('Please enter your Anthropic API key.'); return; }
+        if (!summary)      { showError('Please enter a blog post summary.'); return; }
+        if (!readerIntent) { showError('Please enter a reader intent.'); return; }
+        if (!mainKeyword)  { showError('Please enter a main keyword for Column 1.'); return; }
+        if (!mainVarRaw)   { showError('Please enter keyword variations for Column 1.'); return; }
+        if (!rk1)          { showError('Please enter a related keyword for Column 2.'); return; }
+        if (!rk1VarRaw)    { showError('Please enter keyword variations for Column 2.'); return; }
+        if (!rk2)          { showError('Please enter a related keyword for Column 3.'); return; }
+        if (!rk2VarRaw)    { showError('Please enter keyword variations for Column 3.'); return; }
+
+        var mainVars = parseVariations(mainVarRaw);
+        var rk1Vars  = parseVariations(rk1VarRaw);
+        var rk2Vars  = parseVariations(rk2VarRaw);
+
+        var btn = document.getElementById('generateBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span>Generating 6 pin sets…';
+        document.getElementById('resultsWrap').style.display = 'none';
+
+        var prompt =
+            'You are a Pinterest content writer for a lifestyle and editorial blog. ' +
+            'Your tone is conversational and editorial — warm, natural, like a knowledgeable friend. ' +
+            'Never sound salesy. Avoid hype words like "amazing," "incredible," or "game-changer." ' +
+            'Every line should read like a human wrote it, not a keyword brief.\n\n' +
+
+            'BLOG POST DETAILS:\n' +
+            '- Summary: ' + summary + '\n' +
+            '- Reader intent: ' + readerIntent + '\n\n' +
+
+            'KEYWORD ASSIGNMENTS:\n' +
+            '- Column 1 anchor keyword: "' + mainKeyword + '" | Variations: ' + mainVarRaw + '\n' +
+            '- Column 2 anchor keyword: "' + rk1 + '" | Variations: ' + rk1VarRaw + '\n' +
+            '- Column 3 anchor keyword: "' + rk2 + '" | Variations: ' + rk2VarRaw + '\n\n' +
+
+            'TASK:\n' +
+            'Generate 3 columns, 2 pin sets each (6 total). Each pin set has a title, description, and text overlay.\n\n' +
+
+            'TITLE RULES:\n' +
+            '- Must include the column\'s anchor keyword exactly as written.\n' +
+            '- Under 100 characters.\n' +
+            '- Pin 1 and pin 2 within the same column must use different headline structures (e.g. one as a question, one as a statement, one starting with a number).\n\n' +
+
+            'DESCRIPTION RULES:\n' +
+            '- Under 500 characters.\n' +
+            '- Do NOT use the anchor keyword in descriptions. Use 1–2 of the column\'s keyword variations instead, only where they fit naturally into a sentence you are already writing.\n' +
+            '- Do not list or string variations together. If a variation would sound unnatural, leave it out.\n' +
+            '- End each description with a soft call to action (e.g. "Read more on the blog", "Save this for later"). No hashtags.\n\n' +
+
+            'OVERLAY RULES:\n' +
+            '- 5–8 words max. Punchy, image-ready text meant to appear on the pin image.\n' +
+            '- Must include or clearly reference the column\'s anchor keyword.\n' +
+            '- Pin 1 and pin 2 within the same column must use completely different phrasing.\n\n' +
+
+            'ACROSS ALL 6 PINS:\n' +
+            '- No title, description, or overlay should be repeated or closely reworded. Pinterest suppresses duplicate content.\n' +
+            '- All 6 pins describe the same blog post from different angles.\n\n' +
+
+            'BAD (keyword stuffing): "This tinted mineral sunscreen for dark skin with iron oxides and no white cast SPF for melanin is perfect for hyperpigmentation."\n' +
+            'GOOD (natural writing): "Finally a mineral SPF that disappears on deeper skin tones — no white cast, just buildable coverage that works."\n\n' +
+
+            'Respond with ONLY valid JSON — no markdown, no extra text:\n' +
+            '{\n' +
+            '  "c1p1": {"title": "...", "description": "...", "overlay": "..."},\n' +
+            '  "c1p2": {"title": "...", "description": "...", "overlay": "..."},\n' +
+            '  "c2p1": {"title": "...", "description": "...", "overlay": "..."},\n' +
+            '  "c2p2": {"title": "...", "description": "...", "overlay": "..."},\n' +
+            '  "c3p1": {"title": "...", "description": "...", "overlay": "..."},\n' +
+            '  "c3p2": {"title": "...", "description": "...", "overlay": "..."}\n' +
+            '}';
+
+        try {
+            var response = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': apiKey,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true'
+                },
+                body: JSON.stringify({
+                    model: 'claude-sonnet-4-6',
+                    max_tokens: 2048,
+                    messages: [{ role: 'user', content: prompt }]
+                })
             });
-        }
 
-        function buildPinCard(pinData, anchorKeyword, pinLabel) {
-            var title = pinData.title || '';
-            var description = pinData.description || '';
-            var overlay = pinData.overlay || '';
-
-            var descLen = description.length;
-            var countClass = descLen > 500 ? 'char-count over' : 'char-count';
-            var countText = descLen + ' / 500 chars';
-
-            var card = document.createElement('div');
-            card.className = 'pin-card';
-
-            var placeholder = document.createElement('div');
-            placeholder.className = 'pin-image-placeholder';
-            placeholder.innerHTML =
-                '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>' +
-                '<span class="img-label">Pin Image</span>' +
-                '<div class="overlay-preview">' + escapeHtml(overlay) + '</div>';
-
-            var body = document.createElement('div');
-            body.className = 'pin-body';
-
-            body.innerHTML =
-                '<div class="pin-label">' + escapeHtml(pinLabel) + '</div>' +
-                '<div class="pin-title">' + boldKeyword(title, anchorKeyword) + '</div>' +
-                '<div class="pin-divider"></div>' +
-                '<div class="pin-label">Description</div>' +
-                '<div class="pin-description" data-plain="' + escapeAttr(description) + '">' + boldKeyword(description, anchorKeyword) + '</div>' +
-                '<div class="' + countClass + '">' + countText + '</div>' +
-                '<button class="copy-btn" onclick="copyPlain(this.closest(\'.pin-card\').querySelector(\'.pin-description\').dataset.plain, this)">Copy description</button>';
-
-            card.appendChild(placeholder);
-            card.appendChild(body);
-            return card;
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
-        function escapeAttr(str) {
-            return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
-        function renderResults(pins, mainKeyword, rk1, rk2) {
-            var grid = document.getElementById('resultsGrid');
-            grid.innerHTML = '';
-
-            var columns = [
-                { keyword: mainKeyword, pin1: pins.c1p1, pin2: pins.c1p2 },
-                { keyword: rk1,         pin1: pins.c2p1, pin2: pins.c2p2 },
-                { keyword: rk2,         pin1: pins.c3p1, pin2: pins.c3p2 }
-            ];
-
-            columns.forEach(function(col) {
-                var colEl = document.createElement('div');
-
-                var header = document.createElement('div');
-                header.className = 'col-header';
-                header.textContent = col.keyword;
-                colEl.appendChild(header);
-
-                colEl.appendChild(buildPinCard(col.pin1, col.keyword, 'Pin 1 — Title'));
-                colEl.appendChild(buildPinCard(col.pin2, col.keyword, 'Pin 2 — Title'));
-
-                grid.appendChild(colEl);
-            });
-
-            document.getElementById('resultsWrap').style.display = 'block';
-        }
-
-        async function generate() {
-            hideError();
-
-            var apiKey      = document.getElementById('apiKey').value.trim();
-            var summary     = document.getElementById('summary').value.trim();
-            var mainKeyword = document.getElementById('mainKeyword').value.trim();
-            var audience    = document.getElementById('audience').value.trim();
-            var rk1         = document.getElementById('relatedKeyword1').value.trim();
-            var rk2         = document.getElementById('relatedKeyword2').value.trim();
-
-            if (!apiKey)      { showError('Please enter your Anthropic API key.'); return; }
-            if (!summary)     { showError('Please enter a blog post summary.'); return; }
-            if (!mainKeyword) { showError('Please enter a main keyword.'); return; }
-            if (!rk1)         { showError('Please enter Related Keyword 1.'); return; }
-            if (!rk2)         { showError('Please enter Related Keyword 2.'); return; }
-
-            var btn = document.getElementById('generateBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span>Generating 6 pin sets…';
-            document.getElementById('resultsWrap').style.display = 'none';
-
-            var audienceLine = audience ? '\n- Target audience: ' + audience : '';
-
-            var prompt =
-                'You are a Pinterest content writer for a lifestyle and editorial blog. ' +
-                'Your tone is conversational and editorial — like a knowledgeable friend sharing something useful. ' +
-                'Never sound salesy or ad-like. Avoid hype words like "amazing," "incredible," or "game-changer." ' +
-                'Write in a warm, natural voice. Every line should read like a human wrote it, not a keyword brief.\n\n' +
-
-                'Blog post details:\n' +
-                '- Summary: ' + summary + '\n' +
-                '- Main keyword: ' + mainKeyword + '\n' +
-                '- Related keyword 1: ' + rk1 + '\n' +
-                '- Related keyword 2: ' + rk2 +
-                audienceLine + '\n\n' +
-
-                'Generate 3 columns of Pinterest content, 2 pin sets per column (6 pin sets total). ' +
-                'Each pin set contains: a title, a description, and a text overlay.\n\n' +
-
-                'COLUMN RULES:\n' +
-                '- Column 1 is anchored to: "' + mainKeyword + '" — this phrase must appear in both pin 1 and pin 2 of this column.\n' +
-                '- Column 2 is anchored to: "' + rk1 + '" — this phrase must appear in both pin 1 and pin 2 of this column.\n' +
-                '- Column 3 is anchored to: "' + rk2 + '" — this phrase must appear in both pin 1 and pin 2 of this column.\n\n' +
-
-                'CONTENT RULES:\n' +
-                '- No title, description, or overlay should be repeated or closely reworded across any of the 6 pins. Pinterest suppresses duplicate content.\n' +
-                '- Within each column, pin 1 and pin 2 must use different headline structures for the title and completely different phrasing for the overlay.\n' +
-                '- Descriptions must be under 500 characters. Titles under 100 characters.\n' +
-                '- Overlays are short, punchy phrases (5–8 words max) meant to appear on the pin image.\n' +
-                '- Descriptions end with a soft call to action (e.g. "Read more on the blog", "Save this for later"). No hashtags.\n\n' +
-
-                'KEYWORD RULES:\n' +
-                '- Each column\'s anchor keyword is the only non-negotiable inclusion for that column.\n' +
-                '- Do not string keywords together or list them.\n' +
-                '- Never stuff keywords. Write naturally first, then verify the anchor appears.\n\n' +
-
-                'BAD (keyword stuffing): "This tinted mineral sunscreen for dark skin with iron oxides and no white cast SPF for melanin is perfect for hyperpigmentation."\n' +
-                'GOOD (natural writing): "Finally a mineral SPF that disappears on deeper skin tones — no white cast, just buildable coverage that works."\n\n' +
-
-                'Respond with ONLY valid JSON in exactly this shape, no markdown, no extra text:\n' +
-                '{\n' +
-                '  "c1p1": {"title": "...", "description": "...", "overlay": "..."},\n' +
-                '  "c1p2": {"title": "...", "description": "...", "overlay": "..."},\n' +
-                '  "c2p1": {"title": "...", "description": "...", "overlay": "..."},\n' +
-                '  "c2p2": {"title": "...", "description": "...", "overlay": "..."},\n' +
-                '  "c3p1": {"title": "...", "description": "...", "overlay": "..."},\n' +
-                '  "c3p2": {"title": "...", "description": "...", "overlay": "..."}\n' +
-                '}';
-
-            try {
-                var response = await fetch('https://api.anthropic.com/v1/messages', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': apiKey,
-                        'anthropic-version': '2023-06-01',
-                        'anthropic-dangerous-direct-browser-access': 'true'
-                    },
-                    body: JSON.stringify({
-                        model: 'claude-sonnet-4-6',
-                        max_tokens: 2048,
-                        messages: [{ role: 'user', content: prompt }]
-                    })
-                });
-
-                if (!response.ok) {
-                    var errData = await response.json().catch(function() { return {}; });
-                    throw new Error((errData.error && errData.error.message) || 'API request failed (' + response.status + ')');
-                }
-
-                var data = await response.json();
-                var raw = data.content[0].text.trim();
-
-                var jsonStart = raw.indexOf('{');
-                var jsonEnd = raw.lastIndexOf('}');
-                if (jsonStart === -1 || jsonEnd === -1) throw new Error('Unexpected response format. Please try again.');
-                var pins = JSON.parse(raw.slice(jsonStart, jsonEnd + 1));
-
-                var required = ['c1p1','c1p2','c2p1','c2p2','c3p1','c3p2'];
-                for (var i = 0; i < required.length; i++) {
-                    if (!pins[required[i]]) throw new Error('Incomplete response. Please try again.');
-                }
-
-                renderResults(pins, mainKeyword, rk1, rk2);
-
-            } catch (err) {
-                showError(err.message);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Generate 6 Pin Sets';
+            if (!response.ok) {
+                var errData = await response.json().catch(function() { return {}; });
+                throw new Error((errData.error && errData.error.message) || 'API request failed (' + response.status + ')');
             }
+
+            var data = await response.json();
+            var raw = data.content[0].text.trim();
+
+            var jsonStart = raw.indexOf('{');
+            var jsonEnd = raw.lastIndexOf('}');
+            if (jsonStart === -1 || jsonEnd === -1) throw new Error('Unexpected response format. Please try again.');
+            var pins = JSON.parse(raw.slice(jsonStart, jsonEnd + 1));
+
+            var required = ['c1p1','c1p2','c2p1','c2p2','c3p1','c3p2'];
+            for (var i = 0; i < required.length; i++) {
+                if (!pins[required[i]]) throw new Error('Incomplete response. Please try again.');
+            }
+
+            renderResults(pins, mainKeyword, mainVars, rk1, rk1Vars, rk2, rk2Vars);
+
+        } catch (err) {
+            showError(err.message);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Generate 6 Pin Sets';
         }
-    </script>
+    }
+</script>
 </body>
 </html>
