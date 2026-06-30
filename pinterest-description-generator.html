@@ -450,7 +450,7 @@
             '<div class="pin-divider"></div>' +
 
             '<div class="pin-field-label">Description</div>' +
-            '<div class="pin-description">' + boldVariations(description, variations) + '</div>' +
+            '<div class="pin-description">' + boldVariations(description, variations.concat([anchorKeyword])) + '</div>' +
             '<div class="char-count' + (descLen > 500 ? ' over' : '') + '">' + descLen + ' / 500 chars</div>' +
 
             '<div class="pin-divider"></div>' +
@@ -554,8 +554,8 @@
 
             'DESCRIPTION RULES:\n' +
             '- Under 500 characters.\n' +
-            '- Do NOT use the anchor keyword in descriptions. Use 1–2 of the column\'s keyword variations instead, only where they fit naturally into a sentence you are already writing.\n' +
-            '- Do not list or string variations together. If a variation would sound unnatural, leave it out.\n' +
+            '- Must include the column\'s anchor keyword AND exactly 1 of the column\'s keyword variations, each placed only where it fits naturally into a sentence you are already writing.\n' +
+            '- Do not list or string the keyword and variation together. If the anchor keyword and the chosen variation would sound unnatural together, write two separate natural sentences instead — never force them into one clause.\n' +
             '- End each description with a soft call to action (e.g. "Read more on the blog", "Save this for later"). No hashtags.\n\n' +
 
             'OVERLAY RULES:\n' +
